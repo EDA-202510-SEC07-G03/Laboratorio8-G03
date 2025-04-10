@@ -130,5 +130,183 @@ def values(my_bst, value_i, value_f):
     list_values = sl.new_list()
     return values_range(my_bst["root"], value_i, value_f, list_values)
 
+def is_empty(my_bst):
+    if my_bst["root"] is None:
+        return True
+    else:
+        return False
         
+    
+
+def floor(my_bst, key):
+    if my_bst["root"] is None:
+        return None
+
+    root = my_bst["root"] 
+    return floor_keys(root, key)
+
+def floor_keys(root, key):
+    if root is None:
+        return None
+
+    if key == root["key"]:
+        return root["key"]
+
+    if key < root["key"]:
+        return floor_keys(root["left"], key)
+
+    temp = floor_keys(root["right"], key)
+    if temp is not None:
+        return temp
+    else:
+        return root["key"]
+    
+
+def ceiling(my_bst, key):
+    if my_bst["root"] is None:
+        return None
+
+    root = my_bst["root"] 
+    return ceiling_keys(root, key)
+
+def ceiling_keys(root, key):
+    if root is None:
+        return None
+
+    if key == root["key"]:
+        return root["key"]
+
+    if key < root["key"]:
+        return ceiling_keys(root["right"], key)
+
+    temp = ceiling_keys(root["left"], key)
+    if temp is not None:
+        return temp
+    else:
+        return root["key"]
+    
+def delete_max (my_bst):
+    if my_bst["root"] is None:
+        return None
+    
+def delete_max_tree(root):
+    if root is None:
+        return None
+    
+    if root["right"] is None:
+        return root["left"]
+    
+    root["right"] = delete_max_tree(root["right"])
+    
+    return root
+
+def delete_min (my_bst):
+    if my_bst["root"] is None:
+        return None
+    
+def delete_min_tree(root):
+    if root is None:
+        return None
+    
+    if root["left"] is None:
+        return root["right"]
+    
+    root["left"] = delete_max_tree(root["left"])
+    
+    return root
+
+def select(my_bst, pos):
+
+    if my_bst["root"] is None:
+        return None
+
+    return select_key(my_bst["root"], pos)
+
+def select_key(root, pos):
+    count = [0]  
+
+    def in_order(node):
+        if node is None:
+            return None
+        
+        left = in_order(node["left"])
+        if left is not None:
+            return left
+        
+        count[0] += 1
+        
+        if count[0] == pos:
+            return node["key"]
+
+        return in_order(node["right"])
+    
+    return in_order(root)
+
+def rank(my_bst, key):
+    if my_bst["root"] is None:
+        return 0
+    return rank_keys(my_bst["root"], key)
+
+def rank_keys(root, key):
+    if root is None:
+        return 0
+
+    if key < root["key"]:
+        return rank_keys(root["left"], key)
+    elif key > root["key"]:
+        left_size = 0
+        if root["left"] is not None:
+            left_size = 1 + rank_keys(root["left"], key)
+        return left_size + rank_keys(root["right"], key)
+    else:
+        left_size = 0
+        if root["left"] is not None:
+            left_size = 1 + rank_keys(root["left"], key)
+        return left_size
+
+
+
+def height(my_bst):
+    if my_bst["root"] is None:
+        return 0
+    return height_tree(my_bst["root"])
+
+def height_tree(root):
+    if root is None:
+        return 0
+
+    left_height = height_tree(root["left"])
+    right_height = height_tree(root["right"])
+    
+    return 1 + max(left_height, right_height)
+
+def remove(my_bst, key):
+    if my_bst["root"] is None:
+        return my_bst
+    my_bst["root"] = remove_node(my_bst["root"], key)
+    return my_bst
+
+def remove_node(root, key):
+    if root is None:
+        return None
+    
+    if key < root["key"]:
+
+        root["left"] = remove_node(root["left"], key)
+    elif key > root["key"]:
+
+        root["right"] = remove_node(root["right"], key)
+    else:
+        if root["left"] is None:
+            return root["right"]
+        elif root["right"] is None:
+            return root["left"]
+        else:
+            min_larger_node = root["right"]
+            while min_larger_node["left"] is not None:
+                min_larger_node = min_larger_node["left"]
             
+            root["key"] = min_larger_node["key"]
+            root["right"] = remove_node(root["right"], min_larger_node["key"])
+    
+    return root
