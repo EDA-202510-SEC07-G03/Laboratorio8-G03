@@ -59,7 +59,7 @@ def contains(my_bst, key):
     result = get(my_bst, key)
     if result is None:
         return False
-    else:
+    else: 
         return True  
 
 def key_set_tree(root):
