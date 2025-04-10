@@ -46,8 +46,14 @@ def size_tree(root):
         counter += size_tree(root["right"])
     return counter
 
+def size_tree(root):
+    if root is None:
+        return 0
+    return 1 + size_tree(root["left"]) + size_tree(root["right"])
+
 def size(my_bst):
     return size_tree(my_bst["root"])
+
 
 def contains(my_bst, key):
     result = get(my_bst, key)
@@ -83,24 +89,34 @@ def value_set(my_bst):
     return value_set_tree(my_bst["root"])
 
 def get_min_node(root):
-    result = None
-    if root != None:
-        result = root["key"]
-        get_min_node(root["left"])
-    return result
+    if root is None:
+        return None
+    
+    if root["left"] is None:
+        return root
+    else:
+        return get_min_node(root["left"])
 
 def get_min(my_bst):
-    return get_min_node(my_bst["root"])
+    min_node = get_min_node(my_bst["root"])
+    if min_node is not None:
+        return min_node["key"]
+    return None
 
 def get_max_node(root):
-    result = None
-    if root != None:
-        result = root["key"]
-        get_max_node(root["right"])
-    return result
+    if root is None:
+        return None
+    
+    if root["right"] is None:
+        return root
+    else:
+        return get_max_node(root["right"])
 
 def get_max(my_bst):
-    return get_max_node(my_bst["root"])
+    max_node = get_max_node(my_bst["root"])
+    if max_node is not None:
+        return max_node["key"]
+    return None
 
 def keys_range(root, key_i, key_f, list_key):
     if root == None:
@@ -136,8 +152,6 @@ def is_empty(my_bst):
     else:
         return False
         
-    
-
 def floor(my_bst, key):
     if my_bst["root"] is None:
         return None

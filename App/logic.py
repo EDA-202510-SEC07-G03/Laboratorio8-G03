@@ -99,7 +99,8 @@ def update_date_index(map, crime):
     entry = bst.get(map, crimedate.date())
     if entry is None:
         # TODO Realizar el caso en el que no se encuentra la fecha
-        datentry = bst.put(map, crimedate.date(), crime)
+        bst.put(map, crimedate.date(), new_data_entry(crime))
+        datentry = new_data_entry(crime)
     else:
         datentry = entry
     add_date_index(datentry, crime)
@@ -119,8 +120,7 @@ def add_date_index(datentry, crime):
     offentry = lp.get(offenseIndex, crime['OFFENSE_CODE_GROUP'])
     if (offentry is None):
         # TODO Realice el caso en el que no se encuentre el tipo de crimen
-        new_off = new_offense_entry(offenseIndex, crime['OFFENSE_CODE_GROUP'])
-        al.add_last(new_off["lstoffences"], crime)
+        new_off = new_offense_entry(crime['OFFENSE_CODE_GROUP'],crime)
         lp.put(offenseIndex, crime['OFFENSE_CODE_GROUP'], new_off)
     else:
         # TODO Realice el caso en el que se encuentre el tipo de crimen
@@ -168,7 +168,7 @@ def index_height(analyzer):
     Altura del arbol
     """
     # TODO Completar la función de consulta
-    pass
+    return bst.height(analyzer["dateIndex"])
 
 
 def index_size(analyzer):
@@ -176,7 +176,7 @@ def index_size(analyzer):
     Numero de elementos en el indice
     """
     # TODO Completar la función de consulta
-    return bst.size(analyzer)
+    return bst.size(analyzer["dateIndex"])
 
 
 def min_key(analyzer):
@@ -184,16 +184,15 @@ def min_key(analyzer):
     Llave mas pequena
     """
     # TODO Completar la función de consulta
-    node = bst.get_min(analyzer)
-    return node["key"]
-
+    ans = bst.get_min(analyzer["dateIndex"])
+    return ans
 def max_key(analyzer):
     """
     Llave mas grande
     """
     # TODO Completar la función de consulta
-    node = bst.get_max(analyzer)
-    return node["key"]
+    ans = bst.get_max(analyzer["dateIndex"])
+    return ans
 
 
 def get_crimes_by_range(analyzer, initialDate, finalDate):
